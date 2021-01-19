@@ -1,10 +1,10 @@
 
-name: jd_kd 京东快递签到
+name: jd_gyec 工业品爱消除
  
 on:
   workflow_dispatch:
   schedule:
-     - cron: '0 23 * * *'
+     - cron: '30 * * * *'
   watch:
     types: started
 jobs:
@@ -25,10 +25,10 @@ jobs:
       - name: npm install
         run: |
           npm install
-      - name: 运行 【京东快递签到】
+      - name: 运行 【工业品爱消除】
         if: env.JD_COOKIE
         run: |
-          node jd_kd.js
+          node jd_gyec.js
         env:
           PUSH_KEY: ${{ secrets.PUSH_KEY || github.event.client_payload.PUSH_KEY }}
           BARK_PUSH: ${{ secrets.BARK_PUSH || github.event.client_payload.BARK_PUSH }}
