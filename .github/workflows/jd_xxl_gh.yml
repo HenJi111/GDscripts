@@ -1,10 +1,10 @@
 
-name: jd_joy_steal 宠汪汪偷好友积分与狗粮
+name: jd_xxl_gh 个护爱消除
  
 on:
   workflow_dispatch:
   schedule:
-     - cron: '0 16,18,20,22,0,2 * * *'
+     - cron: '35 * * * *'
   watch:
     types: started
 jobs:
@@ -15,7 +15,6 @@ jobs:
         JD_COOKIE: ${{ secrets.JD_COOKIE }}
         JD_USER_AGENT: ${{ secrets.JD_USER_AGENT }}
         JD_DEBUG: ${{ secrets.JD_DEBUG }}
-        JOY_HELP_FEED: ${{ secrets.JOY_HELP_FEED }}
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -26,10 +25,10 @@ jobs:
       - name: npm install
         run: |
           npm install
-      - name: 运行 【宠汪汪偷好友积分与狗粮】
+      - name: 运行 【个护爱消除】
         if: env.JD_COOKIE
         run: |
-          node jd_joy_steal.js
+          node jd_xxl_gh.js
         env:
           PUSH_KEY: ${{ secrets.PUSH_KEY || github.event.client_payload.PUSH_KEY }}
           BARK_PUSH: ${{ secrets.BARK_PUSH || github.event.client_payload.BARK_PUSH }}
