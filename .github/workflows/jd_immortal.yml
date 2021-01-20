@@ -4,7 +4,7 @@ name: jd_immortal 京东神仙书院
 on:
   workflow_dispatch:
   schedule:
-     - cron: '0 23 * * *'
+     - cron: '30 23 * * *'
   watch:
     types: started
 jobs:
@@ -16,6 +16,7 @@ jobs:
         JD_USER_AGENT: ${{ secrets.JD_USER_AGENT }}
         JD_DEBUG: ${{ secrets.JD_DEBUG }}
         JD_IMMORTAL_LATLON: ${{ secrets.JD_IMMORTAL_LATLON }}
+        JDSXSY_SHARECODES: ${{ secrets.JDSXSY_SHARECODES }}
     steps:
       - name: Checkout
         uses: actions/checkout@v2
