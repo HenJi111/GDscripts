@@ -1,27 +1,27 @@
 /*
-京东快递签到
-活动地址：https://jingcai-h5.jd.com/#/
-签到领豆,14天内满4次和7次享额外奖励，每天运行一次即可
-更新地址：https://raw.githubusercontent.com/LXK9301/jd_scripts/master/jd_kd.js
-
-已支持IOS双京东账号, Node.js支持N个京东账号
-脚本兼容: QuantumultX, Surge, Loon, 小火箭，JSBox, Node.js
+京东炸年兽签到任务🧨
+活动时间:2021-1-18至2021-2-11
+暂不加入品牌会员
+活动入口:https://wbbny.m.jd.com/babelDiy/Zeus/2cKMj86srRdhgWcKonfExzK4ZMBy/index.html
+活动地址：京东app左侧浮动窗口
+已支持IOS双京东账号,Node.js支持N个京东账号
+脚本兼容: QuantumultX, Surge, Loon, JSBox, Node.js
 ============Quantumultx===============
 [task_local]
-#京东快递签到
-10 0 * * * https://raw.githubusercontent.com/LXK9301/jd_scripts/master/jd_kd.js, tag=京东快递签到, img-url=https://raw.githubusercontent.com/58xinian/icon/master/jd_kd.png, enabled=true
+#京东炸年兽签到任务🧨
+30 8 * * * https://raw.githubusercontent.com/LXK9301/jd_scripts/master/jd_nian_sign.js, tag=京东炸年兽签到任务🧨, enabled=true
 
 ================Loon==============
 [Script]
-cron "10 0 * * *" script-path=https://raw.githubusercontent.com/LXK9301/jd_scripts/master/jd_kd.js, tag=京东快递签到
+cron "30 8 * * *" script-path=https://raw.githubusercontent.com/LXK9301/jd_scripts/master/jd_nian_sign.js,tag=京东炸年兽签到任务🧨
 
 ===============Surge=================
-京东快递签到 = type=cron,cronexp="10 0 * * *",wake-system=1,timeout=20,script-path=https://raw.githubusercontent.com/LXK9301/jd_scripts/master/jd_kd.js
+京东炸年兽签到任务🧨 = type=cron,cronexp="30 8 * * *",wake-system=1,timeout=200,script-path=https://raw.githubusercontent.com/LXK9301/jd_scripts/master/jd_nian_sign.js
 
 ============小火箭=========
-京东快递签到 = type=cron,script-path=https://raw.githubusercontent.com/LXK9301/jd_scripts/master/jd_kd.js, cronexpr="10 0 * * *", timeout=200, enable=true
+京东炸年兽签到任务🧨 = type=cron,script-path=https://raw.githubusercontent.com/LXK9301/jd_scripts/master/jd_nian_sign.js, cronexpr="30 8 * * *", timeout=200, enable=true
  */
-const $ = new Env('京东快递签到');
+const $ = new Env('京东炸年兽签到任务🧨');
 
 const notify = $.isNode() ? require('./sendNotify') : '';
 //Node.js用户请在jdCookie.js处填写京东ck;
@@ -44,7 +44,7 @@ if ($.isNode()) {
   cookiesArr.reverse();
   cookiesArr = cookiesArr.filter(item => item !== "" && item !== null && item !== undefined);
 }
-const JD_API_HOST = 'https://api.m.jd.com/api';
+const JD_API_HOST = 'https://api.m.jd.com/client.action';
 !(async () => {
   if (!cookiesArr[0]) {
     $.msg($.name, '【提示】请先获取京东账号一cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/bean/signIndex.action', {"open-url": "https://bean.m.jd.com/bean/signIndex.action"});
@@ -68,8 +68,7 @@ const JD_API_HOST = 'https://api.m.jd.com/api';
         }
         continue
       }
-      await userSignIn();
-      await showMsg();
+      await jdNian()
     }
   }
 })()
@@ -79,33 +78,103 @@ const JD_API_HOST = 'https://api.m.jd.com/api';
     .finally(() => {
       $.done();
     })
-
+async function jdNian() {
+  try {
+    await getHomeData()
+    if(!$.secretp) return
+    await queryMaterials2()
+    await $.wait(2000)
+    await getHomeData(true)
+    await showMsg()
+  } catch (e) {
+    $.logErr(e)
+  }
+}
+function encode(data, aa, extraData) {
+  const temp = {
+    "extraData": JSON.stringify(extraData),
+    "businessData": JSON.stringify(data),
+    "secretp": aa,
+  }
+  return { "ss": (JSON.stringify(temp)) };
+}
+function getRnd() {
+  return Math.floor(1e6 * Math.random()).toString();
+}
 function showMsg() {
   return new Promise(resolve => {
-    $.msg($.name, '', `【京东账号${$.index}】${$.nickName}\n${message}`);
+    console.log('任务已做完！\n如有未完成的任务，请多执行几次。注：目前入会任务不会做')
+    console.log('如出现taskVos错误的，请更新USER_AGENTS.js或使用自定义UA功能')
+    if (!jdNotify) {
+      $.msg($.name, '', `${message}`);
+    } else {
+      $.log(`京东账号${$.index}${$.nickName}\n${message}`);
+    }
+    if (new Date().getHours() === 23) {
+      $.msg($.name, '', `京东账号${$.index}${$.nickName}\n${message}`);
+    }
     resolve()
   })
 }
-function userSignIn() {
-  return new Promise(resolve => {
-    $.post(taskUrl(), (err, resp, data) => {
+
+
+function getHomeData(info=false) {
+  return new Promise((resolve) => {
+    $.post(taskPostUrl('nian_getHomeData'), async (err, resp, data) => {
       try {
         if (err) {
           console.log(`${JSON.stringify(err)}`)
-          console.log(resp)
+          console.log(`${$.name} API请求失败，请检查网路重试`)
+        } else {
+          data = JSON.parse(data);
+          if (data && data.data['bizCode'] === 0) {
+            $.userInfo = data.data.result.homeMainInfo
+            $.secretp = $.userInfo.secretp;
+            if(!$.secretp){
+              console.log(`账号被风控`)
+              message += `账号被风控，无法参与活动\n`
+              $.secretp = null
+              return
+            }
+            console.log(`当前爆竹${$.userInfo.raiseInfo.remainScore}🧨，下一关需要${$.userInfo.raiseInfo.nextLevelScore}🧨`)
+          }
+          else{
+            $.secretp = null
+            console.log(`账号被风控，无法参与活动`)
+            message += `账号被风控，无法参与活动\n`
+          }
+        }
+      } catch (e) {
+        $.logErr(e, resp);
+      } finally {
+        resolve();
+      }
+    })
+  })
+}
+function queryMaterials2() {
+  let body ={"qryParam":"[{\"type\":\"advertGroup\",\"mapTo\":\"homeFeedBannerT\",\"id\":\"05143017\"},{\"type\":\"advertGroup\",\"mapTo\":\"homeFeedBannerS\",\"id\":\"05144045\"},{\"type\":\"advertGroup\",\"mapTo\":\"homeFeedBannerA\",\"id\":\"05144046\"},{\"type\":\"advertGroup\",\"mapTo\":\"homeFeedBannerB\",\"id\":\"05144047\"},{\"type\":\"advertGroup\",\"mapTo\":\"domainShopData\",\"id\":\"05139136\"},{\"type\":\"advertGroup\",\"mapTo\":\"domainShopData2\",\"id\":\"05144271\"},{\"type\":\"advertGroup\",\"mapTo\":\"domainShopToT\",\"id\":\"05152048\"}]","activityId":"2cKMj86srRdhgWcKonfExzK4ZMBy","pageId":"","reqSrc":"","applyKey":"21beast"}
+  return new Promise(resolve => {
+    $.post(taskPostUrl("qryCompositeMaterials", body, "qryCompositeMaterials"), async (err, resp, data) => {
+      try {
+        if (err) {
+          console.log(`${JSON.stringify(err)}`)
           console.log(`${$.name} API请求失败，请检查网路重试`)
         } else {
           if (safeGet(data)) {
             data = JSON.parse(data);
-            if (data.code === 1) {
-              console.log(`今日签到成功，获得${data.content[0].title}`)
-              message += `今日签到成功，获得${data.content[0].title} 🐶\n`;
-
-            } else if (data.code === -1) {
-              console.log(`今日已签到`)
-              message += `【签到】失败，今日已签到`;
-            } else {
-              console.log(`异常：${JSON.stringify(data)}`)
+            if(data.code==='0') {
+              let shopList = data.data.domainShopData2.list
+              let nameList = []
+              $.canSign = true
+              for(let vo of shopList){
+                if(nameList.includes(vo.name)) continue
+                nameList.push(vo.name)
+                console.log(`去做${vo.name}店铺任务`)
+                await signInRead(vo.link)
+                if(!$.canSign) break
+                await $.wait(2000)
+              }
             }
           }
         }
@@ -117,32 +186,259 @@ function userSignIn() {
     })
   })
 }
-function taskUrl() {
+function signInRead(shopSign) {
+  let body = {"shopSign":shopSign}
+  return new Promise(resolve => {
+    $.post(taskPostUrl("nian_shopSignInRead", body, "nian_shopSignInRead"), async (err, resp, data) => {
+      try {
+        if (err) {
+          console.log(`${JSON.stringify(err)}`)
+          console.log(`${$.name} API请求失败，请检查网路重试`)
+        } else {
+          if (safeGet(data)) {
+            data = JSON.parse(data);
+            if(data.code===0 && data.data && data.data.result && !data.data.result.signInTag) {
+              console.log(`店铺未签到，去签到`)
+              await signInWrite(shopSign)
+            } else{
+              console.log(`店铺已签到过`)
+            }
+          }
+        }
+      } catch (e) {
+        $.logErr(e, resp)
+      } finally {
+        resolve();
+      }
+    })
+  })
+}
+function signInWrite(shopSign) {
+  let temp = {
+    "shopSign": shopSign,
+  }
+  const extraData = {
+    "jj": 6,
+    "buttonid": "jmdd-react-smash_0",
+    "sceneid": "homePageh5",
+    "appid": '50073'
+  }
+  let body = {
+    ...encode(temp, $.secretp, extraData),
+    shopSign:shopSign
+  }
+  return new Promise(resolve => {
+    $.post(taskPostUrl("nian_shopSignInWrite", body, "nian_shopSignInWrite"), async (err, resp, data) => {
+      try {
+        if (err) {
+          console.log(`${JSON.stringify(err)}`)
+          console.log(`${$.name} API请求失败，请检查网路重试`)
+        } else {
+          if (safeGet(data)) {
+            data = JSON.parse(data);
+            if (data.data.bizCode === 0) {
+              if(data.data.result.score)
+                console.log(`签到成功，获得${data.data.result.score}爆竹🧨`)
+              else
+                console.log(`签到成功，获得空气`)
+            }
+            else{
+              $.canSign = false
+              console.log(data.data.bizMsg)
+            }
+          }
+        }
+      } catch (e) {
+        $.logErr(e, resp)
+      } finally {
+        resolve();
+      }
+    })
+  })
+}
+
+function pkInfo() {
+  return new Promise(resolve => {
+    $.post(taskPostUrl("nian_pk_getHomeData", {}, "nian_pk_getHomeData"), async (err, resp, data) => {
+      try {
+        if (err) {
+          console.log(`${JSON.stringify(err)}`)
+          console.log(`${$.name} API请求失败，请检查网路重试`)
+        } else {
+          if (safeGet(data)) {
+            data = JSON.parse(data);
+            console.log(data)
+          }
+        }
+      } catch (e) {
+        $.logErr(e, resp)
+      } finally {
+        resolve();
+      }
+    })
+  })
+}
+function pkCollectScore() {
+  return new Promise(resolve => {
+    $.post(taskPostUrl("nian_pk_collectScore", {}, "nian_pk_collectScore"), async (err, resp, data) => {
+      try {
+        if (err) {
+          console.log(`${JSON.stringify(err)}`)
+          console.log(`${$.name} API请求失败，请检查网路重试`)
+        } else {
+          if (safeGet(data)) {
+            data = JSON.parse(data);
+            console.log(data)
+          }
+        }
+      } catch (e) {
+        $.logErr(e, resp)
+      } finally {
+        resolve();
+      }
+    })
+  })
+}
+function pkTaskDetail() {
+  return new Promise(resolve => {
+    $.post(taskPostUrl("nian_pk_getTaskDetail", {}, "nian_pk_getTaskDetail"), async (err, resp, data) => {
+      try {
+        if (err) {
+          console.log(`${JSON.stringify(err)}`)
+          console.log(`${$.name} API请求失败，请检查网路重试`)
+        } else {
+          if (safeGet(data)) {
+            data = JSON.parse(data);
+            console.log(data)
+          }
+        }
+      } catch (e) {
+        $.logErr(e, resp)
+      } finally {
+        resolve();
+      }
+    })
+  })
+}
+function pkAssignGroup(inviteId) {
+  let temp = {
+    "confirmFlag": 1,
+    "inviteId": inviteId,
+  }
+  const extraData = {
+    "jj": 6,
+    "buttonid": "jmdd-react-smash_0",
+    "sceneid": "homePageh5",
+    "appid": '50073'
+  }
+  let body = {
+    ...encode(temp, $.secretp, extraData),
+    inviteId:inviteId
+  }
+  return new Promise(resolve => {
+    $.post(taskPostUrl("nian_pk_assistGroup", body, "nian_pk_assistGroup"), async (err, resp, data) => {
+      try {
+        if (err) {
+          console.log(`${JSON.stringify(err)}`)
+          console.log(`${$.name} API请求失败，请检查网路重试`)
+        } else {
+          if (safeGet(data)) {
+            data = JSON.parse(data);
+            console.log(data)
+          }
+        }
+      } catch (e) {
+        $.logErr(e, resp)
+      } finally {
+        resolve();
+      }
+    })
+  })
+}
+function readShareCode() {
+  console.log(`开始`)
+  return new Promise(async resolve => {
+    $.get({url: `https://code.chiang.fun/api/v1/jd/jdnian/read/${randomCount}/`, 'timeout': 10000}, (err, resp, data) => {
+      try {
+        if (err) {
+          console.log(`${JSON.stringify(err)}`)
+          console.log(`${$.name} API请求失败，请检查网路重试`)
+        } else {
+          if (data) {
+            console.log(`随机取${randomCount}个码放到您固定的互助码后面(不影响已有固定互助)`)
+            data = JSON.parse(data);
+          }
+        }
+      } catch (e) {
+        $.logErr(e, resp)
+      } finally {
+        resolve(data);
+      }
+    })
+    await $.wait(2000);
+    resolve()
+  })
+}
+//格式化助力码
+function shareCodesFormat() {
+  return new Promise(async resolve => {
+    // console.log(`第${$.index}个京东账号的助力码:::${$.shareCodesArr[$.index - 1]}`)
+    $.newShareCodes = [];
+    if ($.shareCodesArr[$.index - 1]) {
+      $.newShareCodes = $.shareCodesArr[$.index - 1].split('@');
+    } else {
+      console.log(`由于您第${$.index}个京东账号未提供shareCode,将采纳本脚本自带的助力码\n`)
+      const tempIndex = $.index > inviteCodes.length ? (inviteCodes.length - 1) : ($.index - 1);
+      $.newShareCodes = inviteCodes[tempIndex].split('@');
+    }
+    const readShareCodeRes = await readShareCode();
+    if (readShareCodeRes && readShareCodeRes.code === 200) {
+      $.newShareCodes = [...new Set([...$.newShareCodes, ...(readShareCodeRes.data || [])])];
+    }
+    console.log(`第${$.index}个京东账号将要助力的好友${JSON.stringify($.newShareCodes)}`)
+    resolve();
+  })
+}
+function requireConfig() {
+  return new Promise(resolve => {
+    console.log(`开始获取${$.name}配置文件\n`);
+    //Node.js用户请在jdCookie.js处填写京东ck;
+    let shareCodes = []
+    console.log(`共${cookiesArr.length}个京东账号\n`);
+    if ($.isNode() && process.env.JDNIAN_SHARECODES) {
+      if (process.env.JDNIAN_SHARECODES.indexOf('\n') > -1) {
+        shareCodes = process.env.JDNIAN_SHARECODES.split('\n');
+      } else {
+        shareCodes = process.env.JDNIAN_SHARECODES.split('&');
+      }
+    }
+    $.shareCodesArr = [];
+    if ($.isNode()) {
+      Object.keys(shareCodes).forEach((item) => {
+        if (shareCodes[item]) {
+          $.shareCodesArr.push(shareCodes[item])
+        }
+      })
+    }
+    console.log(`您提供了${$.shareCodesArr.length}个账号的${$.name}助力码\n`);
+    resolve()
+  })
+}
+
+function taskPostUrl(function_id, body = {}, function_id2) {
+  let url = `${JD_API_HOST}`;
+  if (function_id2) {
+    url += `?functionId=${function_id2}`;
+  }
   return {
-    url: `https://lop-proxy.jd.com/jiFenApi/signInAndGetReward`,
-    body: '[{"userNo":"$cooMrdGatewayUid$"}]',
+    url,
+    body: `functionId=${function_id}&body=${escape(JSON.stringify(body))}&client=wh5&clientVersion=1.0.0`,
     headers: {
-      'Host': 'lop-proxy.jd.com',
-      'lop-dn': 'jingcai.jd.com',
-      'biz-type': 'service-monitor',
-      'app-key': 'jexpress',
-      'access': 'H5',
-      'content-type': 'application/json;charset=utf-8',
-      'clientinfo': '{"appName":"jingcai","client":"m"}',
-      'accept': 'application/json, text/plain, */*',
-      'jexpress-report-time': '1607330170578',
-      'x-requested-with': 'XMLHttpRequest',
-      'source-client': '2',
-      'appparams': '{"appid":158,"ticket_type":"m"}',
-      'version': '1.0.0',
-      'origin': 'https://jingcai-h5.jd.com',
-      'sec-fetch-site': 'same-site',
-      'sec-fetch-mode': 'cors',
-      'sec-fetch-dest': 'empty',
-      'referer': 'https://jingcai-h5.jd.com/',
-      'accept-language': 'zh-CN,zh;q=0.9',
       "Cookie": cookie,
-      "User-Agent": $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;9.2.2;14.2;%E4%BA%AC%E4%B8%9C/9.2.2 CFNetwork/1206 Darwin/20.1.0"),
+      "origin": "https://h5.m.jd.com",
+      "referer": "https://h5.m.jd.com/",
+      'Content-Type': 'application/x-www-form-urlencoded',
+      "User-Agent": $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;9.2.2;14.2;%E4%BA%AC%E4%B8%9C/9.2.2 CFNetwork/1206 Darwin/20.1.0")
     }
   }
 }
