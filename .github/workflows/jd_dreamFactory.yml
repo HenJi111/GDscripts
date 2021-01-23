@@ -16,6 +16,7 @@ jobs:
         JD_USER_AGENT: ${{ secrets.JD_USER_AGENT }}
         JD_DEBUG: ${{ secrets.JD_DEBUG }}
         DREAM_FACTORY_SHARE_CODES: ${{ secrets.DREAM_FACTORY_SHARE_CODES }}
+        DREAMFACTORY_FORBID_ACCOUNT: ${{ secrets.DREAMFACTORY_FORBID_ACCOUNT }}
     steps:
       - name: Checkout
         uses: actions/checkout@v2

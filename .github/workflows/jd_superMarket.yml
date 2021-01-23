@@ -18,6 +18,7 @@ jobs:
         SUPERMARKET_SHARECODES: ${{ secrets.SUPERMARKET_SHARECODES }}
         BUSINESS_CIRCLE_JUMP: ${{ secrets.BUSINESS_CIRCLE_JUMP }}
         SUPERMARKET_LOTTERY: ${{ secrets.SUPERMARKET_LOTTERY }}
+        JOIN_PK_TEAM: ${{ secrets.JOIN_PK_TEAM }}
     steps:
       - name: Checkout
         uses: actions/checkout@v2

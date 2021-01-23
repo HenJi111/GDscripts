@@ -16,6 +16,7 @@ jobs:
         JD_USER_AGENT: ${{ secrets.JD_USER_AGENT }}
         JD_DEBUG: ${{ secrets.JD_DEBUG }}
         JD_JOY_REWARD_NOTIFY: ${{ secrets.JD_JOY_REWARD_NOTIFY }}
+        JD_JOY_REWARD_NAME: ${{ secrets.JD_JOY_REWARD_NAME }}
     steps:
       - name: Checkout
         uses: actions/checkout@v2

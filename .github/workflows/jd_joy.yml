@@ -17,6 +17,7 @@ jobs:
         JD_DEBUG: ${{ secrets.JD_DEBUG }}
         JOY_RUN_FLAG: ${{ secrets.JOY_RUN_FLAG }}
         JOY_TEAM_LEVEL: ${{ secrets.JOY_TEAM_LEVEL }}
+        JOY_RUN_NOTIFY: ${{ secrets.JOY_RUN_NOTIFY }}
     steps:
       - name: Checkout
         uses: actions/checkout@v2
