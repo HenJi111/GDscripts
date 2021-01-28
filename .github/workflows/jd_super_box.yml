@@ -1,10 +1,10 @@
 
-name: jd_immortal_answer 京东神仙书院答题(2.5)
+name: jd_super_box 京东超级盒子
  
 on:
   workflow_dispatch:
   schedule:
-     - cron: '0,5,10,15,20,25,30,35,40,45,50,55,57 0 * * *'
+     - cron: '50 23 * * *'
   watch:
     types: started
 jobs:
@@ -25,10 +25,10 @@ jobs:
       - name: npm install
         run: |
           npm install
-      - name: 运行 【京东神仙书院答题】
+      - name: 运行 【京东超级盒子】
         if: env.JD_COOKIE
         run: |
-          node jd_immortal_answer.js
+          node jd_super_box.js
         env:
           PUSH_KEY: ${{ secrets.PUSH_KEY || github.event.client_payload.PUSH_KEY }}
           BARK_PUSH: ${{ secrets.BARK_PUSH || github.event.client_payload.BARK_PUSH }}
