@@ -4,7 +4,7 @@ name: jd_immortal_answer 京东神仙书院答题(2.5)
 on:
   workflow_dispatch:
   schedule:
-     - cron: '0,5,10,15,20,25,30,35,40,45,50,55,57 0 * * *'
+     - cron: '5 * * * *'
   watch:
     types: started
 jobs:

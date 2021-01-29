@@ -4,7 +4,7 @@ name: jd_superMarket 东东超市
 on:
   workflow_dispatch:
   schedule:
-     - cron: '0 23 * * *'
+     - cron: '55 * * * *'
   watch:
     types: started
 jobs:
