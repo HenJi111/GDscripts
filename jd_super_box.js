@@ -36,12 +36,8 @@ let cookiesArr = [], cookie = '', message;
 const randomCount = $.isNode() ? 20 : 5;
 
 const inviteCodes = [
-  `k12bCERjGflklE_HF4UT_A@6Yb26miSU7nqoJVaAsChRWDUhpVW1JU5_rGayc2oQhU@xrf1-vxi1Fpr-VBwVufKvA@IXvTBBaRdZBWZrQh53vTzw@ulcc6fEnCpIZhfregya92g@XnFPJuQO3G44VH86BX1J90Yc96CFZ6Buh3Vd0yez6Qo`,
-  `k12bCERjGflklE_HF4UT_A@6Yb26miSU7nqoJVaAsChRWDUhpVW1JU5_rGayc2oQhU@xrf1-vxi1Fpr-VBwVufKvA@IXvTBBaRdZBWZrQh53vTzw@ulcc6fEnCpIZhfregya92g@XnFPJuQO3G44VH86BX1J90Yc96CFZ6Buh3Vd0yez6Qo`,
-  `k12bCERjGflklE_HF4UT_A@6Yb26miSU7nqoJVaAsChRWDUhpVW1JU5_rGayc2oQhU@xrf1-vxi1Fpr-VBwVufKvA@IXvTBBaRdZBWZrQh53vTzw@ulcc6fEnCpIZhfregya92g@XnFPJuQO3G44VH86BX1J90Yc96CFZ6Buh3Vd0yez6Qo`,     `k12bCERjGflklE_HF4UT_A@6Yb26miSU7nqoJVaAsChRWDUhpVW1JU5_rGayc2oQhU@xrf1-vxi1Fpr-VBwVufKvA@IXvTBBaRdZBWZrQh53vTzw@ulcc6fEnCpIZhfregya92g@XnFPJuQO3G44VH86BX1J90Yc96CFZ6Buh3Vd0yez6Qo`,
-  `k12bCERjGflklE_HF4UT_A@6Yb26miSU7nqoJVaAsChRWDUhpVW1JU5_rGayc2oQhU@xrf1-vxi1Fpr-VBwVufKvA@IXvTBBaRdZBWZrQh53vTzw@ulcc6fEnCpIZhfregya92g@XnFPJuQO3G44VH86BX1J90Yc96CFZ6Buh3Vd0yez6Qo`,
-  `k12bCERjGflklE_HF4UT_A@6Yb26miSU7nqoJVaAsChRWDUhpVW1JU5_rGayc2oQhU@xrf1-vxi1Fpr-VBwVufKvA@IXvTBBaRdZBWZrQh53vTzw@ulcc6fEnCpIZhfregya92g@XnFPJuQO3G44VH86BX1J90Yc96CFZ6Buh3Vd0yez6Qo`,
-  `k12bCERjGflklE_HF4UT_A@6Yb26miSU7nqoJVaAsChRWDUhpVW1JU5_rGayc2oQhU@xrf1-vxi1Fpr-VBwVufKvA@IXvTBBaRdZBWZrQh53vTzw@ulcc6fEnCpIZhfregya92g@XnFPJuQO3G44VH86BX1J90Yc96CFZ6Buh3Vd0yez6Qo`,
+  `O3eI2LwEpHNofuF6LxjNqw@Hvm2Tg0jWloh4bnPOa9wuA@RY7V2DbS5uInv_GGD7JuoQij_0m9TAUe-t_mpE-BHB4@dZGLTyomKT0ZmOYaa4FSu0Ch0ywXFSW7gXwe_z6nUFc@UHW6hnmrpOABeMMKc5kpng`,
+  `O3eI2LwEpHNofuF6LxjNqw@Hvm2Tg0jWloh4bnPOa9wuA@RY7V2DbS5uInv_GGD7JuoQij_0m9TAUe-t_mpE-BHB4@dZGLTyomKT0ZmOYaa4FSu0Ch0ywXFSW7gXwe_z6nUFc@UHW6hnmrpOABeMMKc5kpng`,
 ];
 
 if ($.isNode()) {
@@ -50,6 +46,7 @@ if ($.isNode()) {
   })
   if (process.env.JD_DEBUG && process.env.JD_DEBUG === 'false') console.log = () => {
   };
+  if (JSON.stringify(process.env).indexOf('GITHUB') > -1) process.exit(0)
 } else {
   let cookiesData = $.getdata('CookiesJD') || "[]";
   cookiesData = jsonParse(cookiesData);
@@ -184,8 +181,10 @@ function getTaskDetail(taskId,taskType) {
           if (safeGet(data)) {
             data = JSON.parse(data);
             if (data.success) {
+              $.canDone = true
               for(let vo of data.data.taskItemList){
                 await doTask(taskId,taskType,vo.itemId)
+                if(!$.canDone) break
                 await $.wait(1000)
               }
             } else {
@@ -223,6 +222,7 @@ function doTask(taskId,taskType,itemId) {
             if (data.success) {
               console.log(`任务完成成功`)
             } else {
+              $.canDone = false
               console.log(`任务完成失败`)
             }
           }
