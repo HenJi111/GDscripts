@@ -1,10 +1,10 @@
 
-name: jd_5g 5G狂欢城
+name: jd_xgyl 小鸽有礼2
  
 on:
   workflow_dispatch:
   schedule:
-     - cron: '0 0 * * *'
+     - cron: '50 23 * * *'
   watch:
     types: started
 jobs:
@@ -25,10 +25,10 @@ jobs:
       - name: npm install
         run: |
           npm install
-      - name: 运行 【5G狂欢城】
+      - name: 运行 【小鸽有礼2】
         if: env.JD_COOKIE
         run: |
-          node jd_5g.js
+          node jd_xgyl.js
         env:
           PUSH_KEY: ${{ secrets.PUSH_KEY || github.event.client_payload.PUSH_KEY }}
           BARK_PUSH: ${{ secrets.BARK_PUSH || github.event.client_payload.BARK_PUSH }}

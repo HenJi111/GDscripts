@@ -9,17 +9,17 @@
 ============Quantumultx===============
 [task_local]
 #京东炸年兽🧨
-0 9,12,20,21 * * * https://raw.githubusercontent.com/LXK9301/jd_scripts/master/jd_nian.js, tag=京东炸年兽🧨, img-url=https://raw.githubusercontent.com/yogayyy/Scripts/main/Icon/lxk0301/jd_nian.png, enabled=true
+0 9,12,20,21 * * * https://gitee.com/lxk0301/jd_scripts/raw/master/jd_nian.js, tag=京东炸年兽🧨, img-url=https://raw.githubusercontent.com/yogayyy/Scripts/main/Icon/lxk0301/jd_nian.png, enabled=true
 
 ================Loon==============
 [Script]
-cron "0 9,12,20,21 * * *" script-path=https://raw.githubusercontent.com/LXK9301/jd_scripts/master/jd_nian.js,tag=京东炸年兽🧨
+cron "0 9,12,20,21 * * *" script-path=https://gitee.com/lxk0301/jd_scripts/raw/master/jd_nian.js,tag=京东炸年兽🧨
 
 ===============Surge=================
-京东炸年兽🧨 = type=cron,cronexp="0 9,12,20,21 * * *",wake-system=1,timeout=3600,script-path=https://raw.githubusercontent.com/LXK9301/jd_scripts/master/jd_nian.js
+京东炸年兽🧨 = type=cron,cronexp="0 9,12,20,21 * * *",wake-system=1,timeout=3600,script-path=https://gitee.com/lxk0301/jd_scripts/raw/master/jd_nian.js
 
 ============小火箭=========
-京东炸年兽🧨 = type=cron,script-path=https://raw.githubusercontent.com/LXK9301/jd_scripts/master/jd_nian.js, cronexpr="0 9,12,20,21 * * *", timeout=3600, enable=true
+京东炸年兽🧨 = type=cron,script-path=https://gitee.com/lxk0301/jd_scripts/raw/master/jd_nian.js, cronexpr="0 9,12,20,21 * * *", timeout=3600, enable=true
  */
 const $ = new Env('京东炸年兽🧨');
 
@@ -797,8 +797,9 @@ function pkInfo() {
           if (safeGet(data)) {
             data = JSON.parse(data);
             if (data.code === 0 && data.data && data.data.bizCode === 0) {
-              console.log(`\n您的好友PK助力码为${data.data.result.groupInfo.groupAssistInviteId}\n`)
+              console.log(`\n您的好友PK助力码为${data.data.result.groupInfo.groupAssistInviteId}\n注：此pk邀请码每天都变！`)
               let info = data.data.result.groupPkInfo
+              console.log(`预计分得:${data.data.result.groupInfo.personalAward}红包`)
               if (info.dayAward)
                 console.log(`白天关卡：${info.dayAward}元红包，完成进度 ${info.dayTotalValue}/${info.dayTargetSell}`)
               else {
