@@ -4,7 +4,7 @@ name: jd_nian 京东炸年兽(2.11)
 on:
   workflow_dispatch:
   schedule:
-     - cron: '0 21,22,23 * * *'
+     - cron: '0 1,4,12,13 * * *'
   watch:
     types: started
 jobs:

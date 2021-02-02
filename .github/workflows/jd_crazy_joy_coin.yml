@@ -15,6 +15,7 @@ jobs:
         JD_COOKIE: ${{ secrets.JD_COOKIE }}
         JD_USER_AGENT: ${{ secrets.JD_USER_AGENT }}
         JD_DEBUG: ${{ secrets.JD_DEBUG }}
+        BUY_JOY_LEVEL: ${{ secrets.BUY_JOY_LEVEL }}
     steps:
       - name: Checkout
         uses: actions/checkout@v2

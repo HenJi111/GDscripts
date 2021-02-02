@@ -17,6 +17,7 @@ jobs:
         JD_DEBUG: ${{ secrets.JD_DEBUG }}
         DDFACTORY_SHARECODES: ${{ secrets.DDFACTORY_SHARECODES }}
         FACTORAY_WANTPRODUCT_NAME: ${{ secrets.FACTORAY_WANTPRODUCT_NAME }}
+        JDFACTORY_FORBID_ACCOUNT: ${{ secrets.JDFACTORY_FORBID_ACCOUNT }}
     steps:
       - name: Checkout
         uses: actions/checkout@v2

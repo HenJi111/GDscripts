@@ -15,6 +15,7 @@ jobs:
         JD_COOKIE: ${{ secrets.JD_COOKIE }}
         JD_USER_AGENT: ${{ secrets.JD_USER_AGENT }}
         JD_DEBUG: ${{ secrets.JD_DEBUG }}
+        JD_WECHAT_USER_AGENT: ${{ secrets.JD_WECHAT_USER_AGENT }}
     steps:
       - name: Checkout
         uses: actions/checkout@v2

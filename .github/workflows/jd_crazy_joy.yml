@@ -16,6 +16,8 @@ jobs:
         JD_USER_AGENT: ${{ secrets.JD_USER_AGENT }}
         JD_DEBUG: ${{ secrets.JD_DEBUG }}
         JDJOY_SHARECODES: ${{ secrets.JDJOY_SHARECODES }}
+        JDJOY_HELPSELF: ${{ secrets.JDJOY_HELPSELF }}
+        JDJOY_APPLYJDBEAN: ${{ secrets.JDJOY_APPLYJDBEAN }}
     steps:
       - name: Checkout
         uses: actions/checkout@v2

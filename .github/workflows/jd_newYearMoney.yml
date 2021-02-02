@@ -1,5 +1,5 @@
 
-name: jd_newYearMoney 京东压岁钱
+name: jd_newYearMoney 京东压岁钱(2.11)
  
 on:
   workflow_dispatch:
@@ -15,6 +15,7 @@ jobs:
         JD_COOKIE: ${{ secrets.JD_COOKIE }}
         JD_USER_AGENT: ${{ secrets.JD_USER_AGENT }}
         JD_DEBUG: ${{ secrets.JD_DEBUG }}
+        JDNY_SHARECODES: ${{ secrets.JDNY_SHARECODES }}
     steps:
       - name: Checkout
         uses: actions/checkout@v2
