@@ -326,7 +326,7 @@ function helpFriend(inviteId) {
           if (data && data.data['bizCode'] === 0) {
             console.log(data.data.result.msg)
           } else {
-            console.log(data.data.bizMsg)
+            console.log(`helpFriends ${data.data.bizMsg}`)
             if (data.data.bizCode === -523) {
               $.canHelp = false
             }
@@ -366,6 +366,54 @@ function readShareCode() {
     })
     await $.wait(2000);
     resolve()
+  })
+}
+function sendCard(cardNo) {
+  return new Promise((resolve) => {
+    $.post(taskPostUrl('newyearmoney_sendCard', {"cardNo": cardNo}), async (err, resp, data) => {
+      try {
+        if (err) {
+          console.log(`${JSON.stringify(err)}`)
+          console.log(`${$.name} API请求失败，请检查网路重试`)
+        } else {
+          data = JSON.parse(data);
+          if (data && data.data['bizCode'] === 0) {
+            receiveCardList.push(data.data.result.token)
+            console.log(`送卡成功`)
+          } else {
+            console.log(`送卡失败，${data.data.bizMsg}`)
+          }
+        }
+      } catch (e) {
+        $.logErr(e, resp);
+      } finally {
+        resolve();
+      }
+    })
+  })
+}
+
+function receiveCard(token) {
+  return new Promise((resolve) => {
+    $.post(taskPostUrl('newyearmoney_receiveCard', {"token": token}), async (err, resp, data) => {
+      try {
+        if (err) {
+          console.log(`${JSON.stringify(err)}`)
+          console.log(`${$.name} API请求失败，请检查网路重试`)
+        } else {
+          data = JSON.parse(data);
+          if (data && data.data['bizCode'] === 0) {
+            console.log(`领卡成功`)
+          } else {
+            console.log(`领卡失败，${data.data.bizMsg}`)
+          }
+        }
+      } catch (e) {
+        $.logErr(e, resp);
+      } finally {
+        resolve();
+      }
+    })
   })
 }
 
