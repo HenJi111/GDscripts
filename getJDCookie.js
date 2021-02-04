@@ -61,6 +61,8 @@ function generateQrcode() {
           const url = 'https://plogin.m.jd.com/cgi-bin/m/tmauth?appid=300&client_type=m&token=' + token;
           qrcode.generate(url, {small: true}); // 输出二维码
           console.log("请打开 京东APP 扫码登录(二维码有效期为3分钟)");
+          console.log("扫描不到请使用工具手动生成如下url二维码");
+          console.log(url);
         }
       } catch (e) {
         $.logErr(e, resp)
