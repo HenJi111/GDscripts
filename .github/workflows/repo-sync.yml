@@ -2,7 +2,7 @@
 name: sync-Kyle0816-scripts
 on:
   schedule:
-    - cron: '0 15 * * *'
+    - cron: '0 22,4,10,16 * * *'
   workflow_dispatch:
   watch:
     types: started
