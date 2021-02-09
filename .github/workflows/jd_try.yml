@@ -1,10 +1,10 @@
 
-name: jd_nh 京东年货节
+name: jd_try 京东试用
  
 on:
   workflow_dispatch:
   schedule:
-     - cron: '0 19 * * *'
+     - cron: '30 2 * * *'
   watch:
     types: started
 jobs:
@@ -25,10 +25,10 @@ jobs:
       - name: npm install
         run: |
           npm install
-      - name: 运行 【京东年货节】
+      - name: 运行 【京东试用】
         if: env.JD_COOKIE
         run: |
-          node jd_nh.js
+          node jd_try.js
         env:
           PUSH_KEY: ${{ secrets.PUSH_KEY || github.event.client_payload.PUSH_KEY }}
           BARK_PUSH: ${{ secrets.BARK_PUSH || github.event.client_payload.BARK_PUSH }}
