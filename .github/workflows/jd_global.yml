@@ -1,10 +1,10 @@
 
-name: jd_superMarket 东东超市
+name: jd_global 环球挑战赛(2.22)
  
 on:
   workflow_dispatch:
   schedule:
-     - cron: '55 */6 * * *'
+     - cron: '0 1,4,12,13 * * *'
   watch:
     types: started
 jobs:
@@ -15,10 +15,7 @@ jobs:
         JD_COOKIE: ${{ secrets.JD_COOKIE }}
         JD_USER_AGENT: ${{ secrets.JD_USER_AGENT }}
         JD_DEBUG: ${{ secrets.JD_DEBUG }}
-        SUPERMARKET_SHARECODES: ${{ secrets.SUPERMARKET_SHARECODES }}
-        BUSINESS_CIRCLE_JUMP: ${{ secrets.BUSINESS_CIRCLE_JUMP }}
-        SUPERMARKET_LOTTERY: ${{ secrets.SUPERMARKET_LOTTERY }}
-        JOIN_PK_TEAM: ${{ secrets.JOIN_PK_TEAM }}
+        JDGLOBAL_SHARECODES: ${{ secrets.JDGLOBAL_SHARECODES }}
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -29,10 +26,10 @@ jobs:
       - name: npm install
         run: |
           npm install
-      - name: 运行 【东东超市】
+      - name: 运行 【环球挑战赛】
         if: env.JD_COOKIE
         run: |
-          node jd_superMarket.js
+          node jd_global.js
         env:
           PUSH_KEY: ${{ secrets.PUSH_KEY || github.event.client_payload.PUSH_KEY }}
           BARK_PUSH: ${{ secrets.BARK_PUSH || github.event.client_payload.BARK_PUSH }}
