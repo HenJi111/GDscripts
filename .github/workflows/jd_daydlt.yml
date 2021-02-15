@@ -1,10 +1,10 @@
 
-name: jd_newYearMoney 京东压岁钱(2.11)
+name: jd_daydlt 天天优惠大乐透
  
 on:
   workflow_dispatch:
   schedule:
-     - cron: '0 0,4 * * *'
+     - cron: '0 10 * * *'
   watch:
     types: started
 jobs:
@@ -15,7 +15,6 @@ jobs:
         JD_COOKIE: ${{ secrets.JD_COOKIE }}
         JD_USER_AGENT: ${{ secrets.JD_USER_AGENT }}
         JD_DEBUG: ${{ secrets.JD_DEBUG }}
-        JDNY_SHARECODES: ${{ secrets.JDNY_SHARECODES }}
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -26,10 +25,10 @@ jobs:
       - name: npm install
         run: |
           npm install
-      - name: 运行 【京东压岁钱】
+      - name: 运行 【天天优惠大乐透】
         if: env.JD_COOKIE
         run: |
-          node jd_newYearMoney.js
+          node jd_daydlt.js
         env:
           PUSH_KEY: ${{ secrets.PUSH_KEY || github.event.client_payload.PUSH_KEY }}
           BARK_PUSH: ${{ secrets.BARK_PUSH || github.event.client_payload.BARK_PUSH }}

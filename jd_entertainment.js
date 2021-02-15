@@ -100,7 +100,7 @@ async function entertainment() {
   await $.wait(1500)
   await getActContent(false,$.userShareCode);
   await $.wait(1500)
-  await getActContent();
+  await getActContent($.doJob);
   await $.wait(1500)
   await answer();
   await $.wait(1500)
@@ -117,7 +117,9 @@ async function draw() {
   for (let i = 0; i < $.cardList.length; i++) {
     const card = $.cardList[i];
     if (card.answer === true && card.draw === false) {
-      await doTask('dingzhi/change/able/startDraw',`activityId=${ACT_ID}&actorUuid=${$.shareCode}&pin=${encodeURIComponent($.secretPin)}&cardId=${card.uuid}`)
+      console.log(`开始抽奖`);
+      await doTask('dingzhi/change/able/startDraw',`activityId=${ACT_ID}&actorUuid=${$.shareCode}&pin=${escape($.secretPin)}&cardId=${card.uuid}`)
+      await $.wait(1000);
     }
   }
 }
@@ -136,8 +138,12 @@ async function answer() {
       newPosition.splice(key, 1)
     }
   }
+  if (newCardList.length === 0) {
+    console.log(`已经答对所有题目了。`)
+    return;
+  }
   for (let i = 0; i <= $.gameScore; i++) {
-    let options = newCardList[i].optionB;
+    let options = '';
     const tmp = questionList.filter((x) => x.q === newCardList[i].uuid);
     if (tmp && tmp[0]) {
       console.log(`在本地题库中找到了答案：${tmp[0].a}`)
@@ -148,7 +154,6 @@ async function answer() {
     await $.wait(1500)
   }
 }
-
 async function getActContent(done = true, authorShareCode = '') {
   return new Promise(resolve => {
     $.post(taskPostUrl('dingzhi/change/able/activityContent', `activityId=${ACT_ID}&pin=${encodeURIComponent($.secretPin)}&pinImg=${$.pinImg}&nick=${$.nickName}&cjyxPin=&cjhyPin=&shareUuid=${authorShareCode}`), async (err, resp, data) => {
@@ -162,6 +167,13 @@ async function getActContent(done = true, authorShareCode = '') {
           $.addSku = data.data.addSku;
           $.mainActive = data.data.mainActive;
           $.toShop = data.data.toShop;
+          if (data.data.gameScore === 9) {
+            $.doJob = false;
+            if (data.data.drawOrNo === false && data.data.canDrawBig === true) {
+              console.log(`开始抽取最终大奖。`)
+              await doTask('dingzhi/change/able/startDrawBig',`activityId=${ACT_ID}&actorUuid=${$.shareCode}&pin=${escape($.secretPin)}&cardId=`)
+            }
+          }
           if (done) {
             for (let i of ['toShop', 'mainActive']) {
               let task = data.data[i];
@@ -219,9 +231,6 @@ function doTask(function_name, body) {
                 console.log(`回答正确。`)
               }
             }
-            // if (data.data.hasOwnProperty('drawInfo') && data.data.drawInfo === null) {
-            //   $.firstRun = true;
-            // }
             if (data.data.hasOwnProperty('drawInfo') && data.data.drawInfo !== null) {
               message += `获得${data.data.drawInfo.name}\n`
               console.log(`获得${data.data.drawInfo.name}\n`);
