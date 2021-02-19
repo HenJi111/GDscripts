@@ -2,7 +2,7 @@
 百变大咖秀
 活动入口：首页搜索-‘百变大咖秀’-底部最右侧按钮
 请手动进入一次活动页面已确保能够自动抽奖
-活动地址：https://lzdz-isv.isvjcloud.com/dingzhi/change/able/activity/3508994?activityId=dz2102100001340202
+活动地址：https://lzdz-isv.isvjcloud.com/dingzhi/change/able/activity/3508994?activityId=dz2102100001340203
 
 新手写脚本，难免有bug，能用且用。
 多谢 whyour 大佬 指导
@@ -30,17 +30,17 @@ const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 const notify = $.isNode() ? require('./sendNotify') : '';
 let cookiesArr = [], cookie = '', originCookie = '', message = '';
 let helpAuthor = true;//为作者助力的开关
-const ACT_ID = 'dz2102100001340202';
+const ACT_ID = 'dz2102100001340203';
 const questionList = [
-  { q: '1b04f39bf2ee4953bc7aa7c2ba037b01', a: 'A:刘维' },
-  { q: '1d777fac821e4614b51314d0b035660e', a: 'C:魏大勋' },
-  { q: '4ddac4345a55479abb17f97476b84eb1', a: 'B:李斯丹妮' },
-  { q: '543885a6e9b845cc8d97e92fd19e17f3', a: 'B:瞿颖' },
-  { q: '8068df6cd3fa41dd8565ac847d551981', a: 'C:锤娜丽莎' },
-  { q: '8bcad350090c41adbe881c5ef3553a7f', a: 'A:王智' },
-  { q: 'd81508f5253b481f962e48d754d33485', a: 'C:孟佳' },
-  { q: 'e24cf162152e4d2bb2172d25a411d5f1', a: 'C:杨迪' },
-  { q: 'fd984e91df104844a0a22c46f4d774b7', a: 'A:沈梦辰' }
+  { q: '84d9ef3ccb2543449935871c2a95f2aa', a: 'B:玲花' },
+  { q: '12ffa15a77c3489ca644ff0880e79343', a: 'A:倪萍' },
+  { q: '2c71328d97e6422a8181c6c025e078cc', a: 'A:管乐' },
+  { q: '3e7c6a1f59e043a59bcdca9b01b4cdaa', a: 'B:汪小敏' },
+  { q: '3f471e4309d7435c81604d0fe1d600b7', a: 'A:王智' },
+  { q: '482efac942f64d52852e92acdf9843df', a: 'B:孙楠' },
+  { q: '66e57d12ab4b4a018a3c2f6a5ebf68ba', a: 'A:曾毅' },
+  { q: 'ac6c845f83844995b8501665f06fe845', a: 'B:朱婧汐' },
+  { q: 'f3c17cb462de4841a0693abdee2b7815', a: 'A:黄艺馨' }
 ]
 if ($.isNode()) {
   Object.keys(jdCookieNode).forEach((item) => {
@@ -384,7 +384,7 @@ function grantTokenKey() {
       'Accept-Language': 'zh-Hans-CN;q=1',
       'Accept-Encoding': 'gzip, deflate, br',
     },
-    body: `body=%7B%22to%22%3A%22https%3A%5C%2F%5C%2Flzdz-isv.isvjcloud.com%5C%2Fdingzhi%5C%2Fchange%5C%2Fable%5C%2Factivity%3FactivityId%3Ddz2102100001340202%22%2C%22action%22%3A%22to%22%7D&build=167538&client=apple&clientVersion=9.3.8&openudid=b9b73293715e562295c0f0aac9d15035ea9b4889&sign=55a872906641d1ed946a1ba3458ebee9&st=1612496164952&sv=110`
+    body: `body=%7B%22to%22%3A%22https%3A%5C%2F%5C%2Flzdz-isv.isvjcloud.com%5C%2Fdingzhi%5C%2Fchange%5C%2Fable%5C%2Factivity%3FactivityId%3Ddz2102100001340203%22%2C%22action%22%3A%22to%22%7D&build=167538&client=apple&clientVersion=9.3.8&openudid=b9b73293715e562295c0f0aac9d15035ea9b4889&sign=55a872906641d1ed946a1ba3458ebee9&st=1612496164952&sv=110`
   }
   return new Promise(resolve => {
     $.post(opt, (err, resp, data) => {
