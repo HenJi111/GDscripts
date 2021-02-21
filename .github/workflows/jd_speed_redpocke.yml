@@ -1,10 +1,10 @@
 
-name: jd_xmf 京东小魔方
+name: jd_speed_redpocke 京东极速版红包(3.3)
  
 on:
   workflow_dispatch:
   schedule:
-     - cron: '0 17 * * *'
+     - cron: '0 16 * * *'
   watch:
     types: started
 jobs:
@@ -25,10 +25,10 @@ jobs:
       - name: npm install
         run: |
           npm install
-      - name: 运行 【京东小魔方】
+      - name: 运行 【京东极速版红包】
         if: env.JD_COOKIE
         run: |
-          node jd_xmf.js
+          node jd_speed_redpocke.js
         env:
           PUSH_KEY: ${{ secrets.PUSH_KEY || github.event.client_payload.PUSH_KEY }}
           BARK_PUSH: ${{ secrets.BARK_PUSH || github.event.client_payload.BARK_PUSH }}
